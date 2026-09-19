@@ -75,6 +75,17 @@ th{color:var(--muted);font-weight:500}
 footer{margin-top:28px;color:var(--muted);font-size:.85rem;text-align:center}
 footer b{color:var(--brand)}
 @media (max-width:600px){ .secs{grid-template-columns:repeat(3,1fr)} }
+
+/* تنسيقات تقسيم السكاشن والأزرار */
+.filter-container{background:rgba(0,0,0,0.03);border:1px solid var(--line);border-radius:12px;padding:12px;margin:16px 0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .filter-container{background:rgba(255,255,255,0.03)}}
+.filter-tabs{display:flex;flex-direction:column;gap:8px}
+.filter-grp{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.filter-lbl{font-size:.82rem;color:var(--muted);min-width:64px;font-weight:600}
+.pill{font:inherit;font-size:.8rem;padding:5px 12px;border-radius:20px;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink);cursor:pointer;transition:all .15s ease}
+.pill:hover{border-color:var(--brand);transform:translateY(-1px)}
+.pill.active{background:var(--brand);color:#fff;border-color:var(--brand);font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,0.15)}
 </style>
 </head>
 <body>
@@ -142,8 +153,16 @@ footer b{color:var(--brand)}
         <button class="btn sm" id="bulkBtn">طبّق العدد ده على كل السكاشن</button>
       </div>
       <table id="capTable"><thead><tr><th>سكشن</th><th>مجموعة</th><th>العدد الأقصى</th><th>مسجلين</th><th>مفتوح</th></tr></thead><tbody></tbody></table>
-      <h2 style="margin-top:22px">الطلبة</h2>
-      <input id="q" type="text" placeholder="دور بالاسم أو الرقم">
+      
+      <!-- قسم الطلبة مع الفلترة بالسكاشن -->
+      <h2 style="margin-top:26px">الطلبة</h2>
+      <div class="filter-container">
+        <div class="filter-tabs" id="secFilters"></div>
+      </div>
+      <div class="row" style="margin-bottom:8px">
+        <input id="q" type="text" placeholder="دور بالاسم أو الرقم" style="flex:1">
+        <span class="sub" id="stuCount" style="white-space:nowrap;font-weight:600"></span>
+      </div>
       <div style="overflow-x:auto">
         <table id="stuTable"><thead><tr><th>الاسم</th><th>الموبايل</th><th>سكشن</th><th>الوقت</th><th></th></tr></thead><tbody></tbody></table>
       </div>
@@ -167,7 +186,7 @@ footer b{color:var(--brand)}
 /* ============ الإعدادات ============ */
 const SUPABASE_URL = "https://inmxacjobxqgekacmyec.supabase.co";
 const ANON_KEY     = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlubXhhY2pvYnhxZ2VrYWNteWVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTMxMTQsImV4cCI6MjEwNTM4OTExNH0.LEJFy3_rMy0UnX1uiSiliyMOtMpbZmzQgIODxOB5nxo";
-const SCHEDULE_URL = "";   // سيبها فاضية لو مش عايز زرار الجدول، أو حط رابط موقع الجدول
+const SCHEDULE_URL = "";
 const GROUPS = {1:[1,2,3,4,5], 2:[6,7,8,9,10], 3:[11,12,13,14], 4:[15,16,17,18]};
 
 /* ============ أدوات ============ */
@@ -177,8 +196,8 @@ const esc = s => String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">"
 const say = (el,text,kind="err") => el.innerHTML = text ? `<div class="msg ${kind}">${esc(text)}</div>` : "";
 const digits = s => {
   let d = (s||"").replace(/\D/g,"");
-  if(/^0020[0-9]{10}$/.test(d)) d = "0" + d.slice(4);      // 0020xxxxxxxxxx
-  else if(/^20[0-9]{10}$/.test(d)) d = "0" + d.slice(2);   // +20xxxxxxxxxx
+  if(/^0020[0-9]{10}$/.test(d)) d = "0" + d.slice(4);
+  else if(/^20[0-9]{10}$/.test(d)) d = "0" + d.slice(2);
   return d;
 };
 const validName = n => { const w = n.split(" "); return w.length >= 4 && w.every(x => x.length >= 2); };
@@ -203,7 +222,7 @@ async function api(fn, args={}){
   return body ? JSON.parse(body) : null;
 }
 
-/* فحص الإعدادات أول ما الصفحة تفتح */
+/* فحص الإعدادات */
 (async () => {
   const bad = !SUPABASE_URL.startsWith("https://") || SUPABASE_URL.includes("xxxxxxxx")
            || ANON_KEY.length < 40 || ANON_KEY.includes("ضع");
@@ -349,10 +368,59 @@ $("#bulkBtn").onclick = async () => {
   say($("#adminMsg"),"اتظبط العدد لكل السكاشن","ok"); refresh();
 };
 
+/* ============ إدارة وفلترة الطلبة ============ */
 let students = [];
+let activeSecFilter = null; // null = عرض كل السكاشن
+
+function renderFilterTabs(){
+  const f = $("#secFilters");
+  let html = `<div class="filter-grp">
+    <span class="filter-lbl">العرض:</span>
+    <button class="pill ${activeSecFilter === null ? 'active' : ''}" data-filter="all">الكل (${students.length})</button>
+  </div>`;
+
+  for(const [grp, secList] of Object.entries(GROUPS)){
+    html += `<div class="filter-grp">
+      <span class="filter-lbl">مجموعة ${grp}:</span>
+      ${secList.map(s => {
+        const count = students.filter(st => st.section_id === s).length;
+        return `<button class="pill ${activeSecFilter === s ? 'active' : ''}" data-filter="${s}">
+          سكشن ${s} (${count})
+        </button>`;
+      }).join("")}
+    </div>`;
+  }
+  f.innerHTML = html;
+}
+
+$("#secFilters").onclick = e => {
+  const b = e.target.closest(".pill");
+  if(!b) return;
+  const val = b.dataset.filter;
+  activeSecFilter = (val === "all") ? null : +val;
+  renderFilterTabs();
+  displayFilteredStudents();
+};
+
 async function loadStudents(){
   students = await api("admin_list",{p_code:adminCode, p_q:$("#q").value.trim()});
-  $("#stuTable").tBodies[0].innerHTML = students.map(s=>`
+  renderFilterTabs();
+  displayFilteredStudents();
+}
+
+function displayFilteredStudents(){
+  const list = (activeSecFilter !== null)
+    ? students.filter(s => s.section_id === activeSecFilter)
+    : students;
+
+  $("#stuCount").textContent = `المعروض: ${list.length} طالب`;
+
+  if(list.length === 0){
+    $("#stuTable").tBodies[0].innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:22px">مفيش طلبة مسجلة في السكشن ده</td></tr>`;
+    return;
+  }
+
+  $("#stuTable").tBodies[0].innerHTML = list.map(s=>`
     <tr>
       <td>${esc(s.full_name)}</td><td dir="ltr">${esc(s.phone)}</td>
       <td><select data-move="${s.id}" style="padding:5px;width:70px">${
@@ -361,6 +429,7 @@ async function loadStudents(){
       <td><button class="btn sm danger" data-del="${s.id}">حذف</button></td>
     </tr>`).join("");
 }
+
 let qt; $("#q").oninput = () => { clearTimeout(qt); qt = setTimeout(loadStudents, 350); };
 
 $("#stuTable").addEventListener("change", async e => {
@@ -373,6 +442,7 @@ $("#stuTable").addEventListener("change", async e => {
   say($("#adminMsg"), r.ok ? "اتنقل" : (r.msg||"محصلش"), r.ok ? "ok" : "err");
   refresh(); loadStudents();
 });
+
 $("#stuTable").addEventListener("click", async e => {
   const b = e.target.closest("[data-del]"); if(!b) return;
   if(!confirm("تحذف تسجيل الطالب ده؟ هيقدر يسجل تاني من الأول.")) return;
