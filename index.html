@@ -76,7 +76,6 @@ footer{margin-top:28px;color:var(--muted);font-size:.85rem;text-align:center}
 footer b{color:var(--brand)}
 @media (max-width:600px){ .secs{grid-template-columns:repeat(3,1fr)} }
 
-/* تنسيقات تقسيم السكاشن والأزرار */
 .filter-container{background:rgba(0,0,0,0.03);border:1px solid var(--line);border-radius:12px;padding:12px;margin:16px 0}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .filter-container{background:rgba(255,255,255,0.03)}}
 .filter-tabs{display:flex;flex-direction:column;gap:8px}
@@ -331,8 +330,16 @@ $("#loginBtn").onclick = async () => {
   }catch(e){ say($("#loginMsg"), e.message || "في مشكلة في الاتصال"); }
 };
 
-async function refresh(){ renderAdmin(await api("admin_summary",{p_code:adminCode})); }
-$("#refreshBtn").onclick = () => { refresh(); loadStudents(); };
+async function refresh(){ 
+  const summary = await api("admin_summary",{p_code:adminCode});
+  renderAdmin(summary); 
+  return summary;
+}
+$("#refreshBtn").onclick = async () => { 
+  await refresh(); 
+  await loadStudents(); 
+  say($("#adminMsg"), "تم تحديث البيانات بنجاح", "ok");
+};
 
 function renderAdmin(r){
   $("#totalTxt").textContent = `إجمالي المسجلين: ${r.total}`;
@@ -353,9 +360,22 @@ function renderAdmin(r){
 
 $("#capTable").addEventListener("change", async e => {
   const id = e.target.dataset.cap; if(!id) return;
-  await api("admin_set_capacity",{p_code:adminCode, p_section:+id, p_capacity:+e.target.value});
-  refresh();
+  const newCap = parseInt(e.target.value, 10);
+  if (isNaN(newCap) || newCap < 0) return alert("اكتب رقم صحيح");
+  
+  try {
+    const res = await api("admin_set_capacity", {p_code:adminCode, p_section:+id, p_capacity:newCap});
+    if(res && res.ok) {
+      await refresh();
+      say($("#adminMsg"), `تم تعديل سعة سكشن ${id} إلى ${newCap}`, "ok");
+    } else {
+      alert((res && res.msg) || "حدث خطأ أثناء تعديل السعة");
+    }
+  } catch(err) {
+    alert(err.message || "فشل الاتصال لتعديل السعة");
+  }
 });
+
 $("#capTable").addEventListener("click", async e => {
   const b = e.target.closest("[data-open]"); if(!b) return;
   await api("admin_set_section_open",{p_code:adminCode, p_section:+b.dataset.open, p_open:b.dataset.val==="1"});
@@ -363,15 +383,28 @@ $("#capTable").addEventListener("click", async e => {
 });
 
 $("#bulkBtn").onclick = async () => {
-  const v = +$("#bulkCap").value;
-  if(!(v >= 0)) return say($("#adminMsg"),"اكتب رقم صح");
-  await api("admin_set_capacity",{p_code:adminCode, p_section:null, p_capacity:v});
-  say($("#adminMsg"),"اتظبط العدد لكل السكاشن","ok"); refresh();
+  const v = parseInt($("#bulkCap").value, 10);
+  if (isNaN(v) || v < 0) return say($("#adminMsg"), "اكتب رقم صحيح", "err");
+  
+  $("#bulkBtn").disabled = true;
+  try {
+    const res = await api("admin_set_capacity", { p_code: adminCode, p_section: 0, p_capacity: v });
+    if (res && res.ok) {
+      await refresh();
+      say($("#adminMsg"), `اتظبط العدد لكل السكاشن إلى ${v}`, "ok");
+    } else {
+      say($("#adminMsg"), (res && res.msg) || "حدث خطأ أثناء تعديل السعة", "err");
+    }
+  } catch (err) {
+    say($("#adminMsg"), err.message || "فشل الاتصال لتعديل السعة", "err");
+  } finally {
+    $("#bulkBtn").disabled = false;
+  }
 };
 
 /* ============ إدارة وفلترة الطلبة ============ */
 let students = [];
-let activeSecFilter = null; // null = عرض كل السكاشن
+let activeSecFilter = null;
 
 function renderFilterTabs(){
   const f = $("#secFilters");
@@ -475,7 +508,7 @@ function downloadCSV(dataList, fileName) {
 
 $("#csvBtn").onclick = async () => {
   const all = await api("admin_list", { p_code: adminCode, p_q: "" });
-  if (!all.length) return alert("مفيش طلبة مسجلة لتحميلهم");
+  if (!all || !all.length) return alert("مفيش طلبة مسجلة لتحميلهم");
   downloadCSV(all, `كشف_جميع_السكاشن_${new Date().toISOString().slice(0, 10)}.csv`);
 };
 
@@ -484,7 +517,7 @@ $("#csvSecBtn").onclick = () => {
     ? students.filter(s => s.section_id === activeSecFilter)
     : students;
 
-  if (!list.length) return alert("مفيش طلبة في السكشن المختار حالياً");
+  if (!list || !list.length) return alert("مفيش طلبة في السكشن المختار حالياً");
 
   const title = activeSecFilter 
     ? `كشف_سكشن_${activeSecFilter}_${new Date().toISOString().slice(0, 10)}.csv`
