@@ -144,7 +144,8 @@ footer b{color:var(--brand)}
       <div class="row" style="margin:6px 0 14px">
         <button class="btn sm" id="toggleReg">-</button>
         <button class="btn sm ghost" id="refreshBtn">تحديث</button>
-        <button class="btn sm ghost" id="csvBtn">تحميل CSV</button>
+        <button class="btn sm ghost" id="csvBtn">تحميل CSV (الكل)</button>
+        <button class="btn sm ghost" id="csvSecBtn">تحميل CSV (المعروض فقط)</button>
         <button class="btn sm ghost" id="codeBtn">تغيير الكود</button>
         <span class="sub" id="totalTxt"></span>
       </div>
@@ -450,15 +451,46 @@ $("#stuTable").addEventListener("click", async e => {
   refresh(); loadStudents();
 });
 
-$("#csvBtn").onclick = async () => {
-  const all = await api("admin_list",{p_code:adminCode, p_q:""});
-  const rows = [["الاسم","الموبايل","السكشن","وقت التسجيل"],
-    ...all.map(s=>[s.full_name, s.phone, s.section_id, new Date(s.created_at).toLocaleString("ar-EG")])];
-  const csv = "\uFEFF" + rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\r\n");
+function downloadCSV(dataList, fileName) {
+  const rows = [
+    ["م", "الاسم رباعي", "رقم الموبايل", "السكشن", "المجموعة", "تاريخ ووقت التسجيل"],
+    ...dataList.map((s, idx) => [
+      idx + 1,
+      s.full_name,
+      `\t${s.phone}`,
+      s.section_id,
+      Math.ceil(s.section_id <= 5 ? 1 : s.section_id <= 10 ? 2 : s.section_id <= 14 ? 3 : 4),
+      new Date(s.created_at).toLocaleString("ar-EG")
+    ])
+  ];
+
+  const csv = "\uFEFF" + rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\r\n");
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
-  a.download = "sections-" + new Date().toISOString().slice(0,10) + ".csv";
-  document.body.appendChild(a); a.click(); a.remove();
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+$("#csvBtn").onclick = async () => {
+  const all = await api("admin_list", { p_code: adminCode, p_q: "" });
+  if (!all.length) return alert("مفيش طلبة مسجلة لتحميلهم");
+  downloadCSV(all, `كشف_جميع_السكاشن_${new Date().toISOString().slice(0, 10)}.csv`);
+};
+
+$("#csvSecBtn").onclick = () => {
+  const list = (activeSecFilter !== null)
+    ? students.filter(s => s.section_id === activeSecFilter)
+    : students;
+
+  if (!list.length) return alert("مفيش طلبة في السكشن المختار حالياً");
+
+  const title = activeSecFilter 
+    ? `كشف_سكشن_${activeSecFilter}_${new Date().toISOString().slice(0, 10)}.csv`
+    : `كشف_الطلبة_المعروضين_${new Date().toISOString().slice(0, 10)}.csv`;
+
+  downloadCSV(list, title);
 };
 
 $("#codeBtn").onclick = async () => {
