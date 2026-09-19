@@ -58,6 +58,7 @@ input:focus,select:focus{outline:none;border-color:var(--brand)}
   padding:12px 8px;cursor:pointer;text-align:center;font:inherit}
 .sec .n{font-size:1.5rem;font-weight:700;display:block;line-height:1.1}
 .sec .left{font-size:.78rem;color:var(--muted);display:block;margin-top:3px}
+.sec .left.almost{color:var(--gold);font-weight:600}
 .sec:hover:not(:disabled){border-color:var(--brand)}
 .sec:disabled{opacity:.55;cursor:not-allowed;border-style:dashed}
 .sec:disabled .left{color:var(--warn)}
@@ -289,9 +290,22 @@ async function loadSections(){
       const s = byId[n] || {capacity:0, taken:0, is_open:false};
       const left = Math.max(0, s.capacity - s.taken);
       const full = !s.is_open || left === 0;
+
+      let statusText = "متاح";
+      let statusClass = "left";
+
+      if (!s.is_open) {
+        statusText = "مقفول";
+      } else if (left === 0) {
+        statusText = "اكتمل العدد";
+      } else if (left <= 5) {
+        statusText = "قرب يكتمل";
+        statusClass = "left almost";
+      }
+
       return `<button class="sec" data-sec="${n}" ${full?"disabled":""}>
         <span class="n">${n}</span>
-        <span class="left">${full ? (s.is_open ? "اكتمل العدد" : "مقفول") : "فاضي "+left+" من "+s.capacity}</span>
+        <span class="${statusClass}">${statusText}</span>
       </button>`;}).join("")}</div></div>`).join("");
 }
 
