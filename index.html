@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تسجيل السكاشن – المستوى الثاني | Youssef Jo</title>
+<meta name="description" content="تسجيل توزيع السكاشن للمستوى الثاني – كلية الحاسبات والذكاء الاصطناعي، جامعة المنيا الأهلية">
+<meta property="og:title" content="تسجيل السكاشن – المستوى الثاني">
+<meta property="og:description" content="اختار سكشنك للسنة الجاية. التسجيل مرة واحدة بس.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_EG">
+<meta property="og:url" content="https://ضع-رابط-الموقع-هنا/">
+<meta property="og:image" content="https://ضع-رابط-الموقع-هنا/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="تسجيل السكاشن – المستوى الثاني">
+<meta name="twitter:image" content="https://ضع-رابط-الموقع-هنا/og.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E9EDF3; --surface:#FFFFFF; --ink:#16204F; --muted:#5A6386; --line:#CBD2E1;
+  --brand:#23307A; --gold:#E3B23C; --ok:#1B7F4F; --ok-bg:#E8F5EE; --warn:#B4231B; --warn-bg:#FDECEA;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1330; --surface:#171E45; --ink:#E7EAF7; --muted:#9AA3C8; --line:#2C3566;
+  --brand:#9FB0FF; --gold:#F0C45A; --ok:#5ECB92; --ok-bg:#12331F; --warn:#FF8A80; --warn-bg:#3A1A22;
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Readex Pro",Tahoma,sans-serif;line-height:1.55}
+.wrap{max-width:900px;margin:0 auto;padding:26px 16px 70px}
+h1{font-size:clamp(1.3rem,3.2vw,1.9rem);color:var(--brand);margin:0 0 4px}
+h2{font-size:1.05rem;margin:0 0 10px}
+.sub{color:var(--muted);font-size:.92rem;margin:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:18px}
+label{display:block;font-size:.9rem;color:var(--muted);margin:12px 0 6px}
+input[type=text],input[type=tel],input[type=password],input[type=number],select{
+  width:100%;font:inherit;padding:12px 14px;border-radius:11px;border:1.5px solid var(--line);
+  background:transparent;color:var(--ink)}
+input:focus,select:focus{outline:none;border-color:var(--brand)}
+.btn{font:inherit;font-weight:600;border:0;border-radius:11px;padding:12px 22px;cursor:pointer;
+  background:var(--brand);color:#fff;margin-top:16px}
+.btn.ghost{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+.btn.danger{background:var(--warn)}
+.btn.sm{padding:7px 12px;font-size:.85rem;margin:0}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.msg{margin-top:14px;padding:11px 14px;border-radius:11px;font-size:.92rem}
+.msg.err{background:var(--warn-bg);color:var(--warn)}
+.msg.ok{background:var(--ok-bg);color:var(--ok)}
+.hint{color:var(--muted);font-size:.82rem;margin-top:6px}
+.grp{margin-top:16px}
+.grp h3{margin:0 0 8px;font-size:.9rem;color:var(--muted);font-weight:500}
+.secs{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+.sec{border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:13px;
+  padding:12px 8px;cursor:pointer;text-align:center;font:inherit}
+.sec .n{font-size:1.5rem;font-weight:700;display:block;line-height:1.1}
+.sec .left{font-size:.78rem;color:var(--muted);display:block;margin-top:3px}
+.sec:hover:not(:disabled){border-color:var(--brand)}
+.sec:disabled{opacity:.55;cursor:not-allowed;border-style:dashed}
+.sec:disabled .left{color:var(--warn)}
+.sec.mine{background:var(--brand);color:#fff;border-color:var(--brand)}
+.sec.mine .left{color:#fff}
+.big{font-size:3.4rem;font-weight:700;color:var(--brand);line-height:1}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.88rem}
+th,td{text-align:right;padding:8px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:500}
+.modal{position:fixed;inset:0;background:rgba(10,14,40,.6);display:flex;align-items:center;
+  justify-content:center;padding:18px;z-index:9}
+.modal .card{margin:0;max-width:420px;width:100%}
+.hide{display:none!important}
+footer{margin-top:28px;color:var(--muted);font-size:.85rem;text-align:center}
+footer b{color:var(--brand)}
+@media (max-width:600px){ .secs{grid-template-columns:repeat(3,1fr)} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>تسجيل السكاشن – المستوى الثاني</h1>
+  <p class="sub">كلية الحاسبات والذكاء الاصطناعي، جامعة المنيا الأهلية · إعداد <b>Youssef Jo</b></p>
+
+  <!-- ====== شاشة البيانات ====== -->
+  <section class="card" id="gate">
+    <h2>بياناتك الأول</h2>
+    <p class="sub">التسجيل مرة واحدة بس، والاختيار هتمشي بيه السنة كلها إن شاء الله. سنة تانية بس هي اللي تسجل هنا.</p>
+    <label for="name">الاسم رباعي</label>
+    <input id="name" type="text" autocomplete="name" placeholder="الاسم الأول واسم الأب والجد والعائلة (رباعي)">
+    <label for="phone">رقم الموبايل</label>
+    <input id="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01xxxxxxxxx">
+    <p class="hint">الرقم عشان نتواصل معاك لو حصلت أي حاجة في سكشنك.</p>
+    <button class="btn" id="goBtn">يلا نكمل</button>
+    <div id="gateMsg"></div>
+  </section>
+
+  <!-- ====== اختيار السكشن ====== -->
+  <section class="card hide" id="picker">
+    <h2>اختار سكشنك</h2>
+    <p class="sub" id="pickerSub">السكشن اللي مكتمل بيقفل، اختار واحد تاني.</p>
+    <div id="notice"></div>
+    <div id="groups"></div>
+    <div id="pickMsg"></div>
+  </section>
+
+  <!-- ====== النتيجة ====== -->
+  <section class="card hide" id="done">
+    <h2 id="doneTitle">تم تسجيلك</h2>
+    <div class="row" style="margin-top:8px">
+      <span class="big" id="doneSec">-</span>
+      <div><div style="font-weight:600" id="doneName">-</div><div class="sub">سكشنك للسنة الجاية</div></div>
+    </div>
+    <div class="msg ok" id="doneMsg">الاختيار ده نهائي. لو فيه أي تعديل، كلّم المسؤول عن التوزيع.</div>
+    <a id="schedLink" class="btn ghost" style="display:inline-block;text-decoration:none" href="#">شوف جدول السكشن</a>
+  </section>
+
+  <footer>
+    <p>مشاكل في التسجيل؟ كلّم <b>Youssef Jo</b></p>
+    <p><a href="#admin" id="adminLink" style="color:var(--muted)">لوحة التحكم</a></p>
+  </footer>
+
+  <!-- ====== لوحة التحكم ====== -->
+  <section class="card hide" id="admin">
+    <h2>لوحة التحكم</h2>
+    <div id="adminLogin">
+      <label for="code">الكود السري</label>
+      <input id="code" type="password" autocomplete="off">
+      <button class="btn" id="loginBtn">دخول</button>
+      <div id="loginMsg"></div>
+    </div>
+    <div id="adminPanel" class="hide">
+      <div class="row" style="margin:6px 0 14px">
+        <button class="btn sm" id="toggleReg">-</button>
+        <button class="btn sm ghost" id="refreshBtn">تحديث</button>
+        <button class="btn sm ghost" id="csvBtn">تحميل CSV</button>
+        <button class="btn sm ghost" id="codeBtn">تغيير الكود</button>
+        <span class="sub" id="totalTxt"></span>
+      </div>
+      <div class="row">
+        <input id="bulkCap" type="number" min="0" style="width:120px" placeholder="العدد">
+        <button class="btn sm" id="bulkBtn">طبّق العدد ده على كل السكاشن</button>
+      </div>
+      <table id="capTable"><thead><tr><th>سكشن</th><th>مجموعة</th><th>العدد الأقصى</th><th>مسجلين</th><th>مفتوح</th></tr></thead><tbody></tbody></table>
+      <h2 style="margin-top:22px">الطلبة</h2>
+      <input id="q" type="text" placeholder="دور بالاسم أو الرقم">
+      <div style="overflow-x:auto">
+        <table id="stuTable"><thead><tr><th>الاسم</th><th>الموبايل</th><th>سكشن</th><th>الوقت</th><th></th></tr></thead><tbody></tbody></table>
+      </div>
+      <div id="adminMsg"></div>
+    </div>
+  </section>
+</div>
+
+<div class="modal hide" id="confirm">
+  <div class="card">
+    <h2>تأكيد التسجيل</h2>
+    <p class="sub" id="confirmTxt"></p>
+    <div class="row">
+      <button class="btn" id="yesBtn">أيوة، سجّلني</button>
+      <button class="btn ghost" id="noBtn">رجوع</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ الإعدادات ============ */
+const SUPABASE_URL = "https://inmxacjobxqgekacmyec.supabase.co";
+const ANON_KEY     = "sb_publishable_yonBVtNt8x3k7TnqCmDBIg_PEzyFTwe";
+const SCHEDULE_URL = "";   // سيبها فاضية لو مش عايز زرار الجدول، أو حط رابط موقع الجدول
+const GROUPS = {1:[1,2,3,4,5], 2:[6,7,8,9,10], 3:[11,12,13,14], 4:[15,16,17,18]};
+
+/* ============ أدوات ============ */
+const $ = s => document.querySelector(s);
+const show = (el,on=true) => el.classList.toggle("hide", !on);
+const esc = s => String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const say = (el,text,kind="err") => el.innerHTML = text ? `<div class="msg ${kind}">${esc(text)}</div>` : "";
+const digits = s => {
+  let d = (s||"").replace(/\D/g,"");
+  if(/^0020[0-9]{10}$/.test(d)) d = "0" + d.slice(4);      // 0020xxxxxxxxxx
+  else if(/^20[0-9]{10}$/.test(d)) d = "0" + d.slice(2);   // +20xxxxxxxxxx
+  return d;
+};
+const validName = n => { const w = n.split(" "); return w.length >= 4 && w.every(x => x.length >= 2); };
+
+async function api(fn, args={}){
+  let r;
+  try{
+    r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`,{
+      method:"POST",
+      headers:{ "Content-Type":"application/json", apikey:ANON_KEY, Authorization:"Bearer "+ANON_KEY },
+      body: JSON.stringify(args)
+    });
+  }catch(e){ throw new Error("مفيش اتصال بالسيرفر — اتأكد من رابط المشروع (Project URL)"); }
+  const body = await r.text();
+  if(!r.ok){
+    let d = {}; try{ d = JSON.parse(body); }catch(e){}
+    console.error("Supabase error", r.status, body);
+    if(r.status === 401) throw new Error("المفتاح (anon key) غلط أو ناقص");
+    if(r.status === 404) throw new Error("الدالة "+fn+" مش موجودة — يبقى ملف SQL ماتشغلش في المشروع ده");
+    throw new Error((d.message || d.hint || ("خطأ "+r.status)));
+  }
+  return body ? JSON.parse(body) : null;
+}
+
+/* فحص الإعدادات أول ما الصفحة تفتح */
+(async () => {
+  const bad = !SUPABASE_URL.startsWith("https://") || SUPABASE_URL.includes("xxxxxxxx")
+           || ANON_KEY.length < 40 || ANON_KEY.includes("ضع");
+  if(bad) return say($("#gateMsg"), "الإعدادات ناقصة: حط Project URL و anon key في أول ملف sections.html");
+  try{
+    const list = await api("list_sections");
+    if(!Array.isArray(list) || !list.length) say($("#gateMsg"), "الاتصال شغال بس مفيش سكاشن — شغّل ملف supabase.sql في SQL Editor");
+  }catch(e){ say($("#gateMsg"), e.message); }
+})();
+
+let me = { name:"", phone:"" }, secs = [], adminCode = "", timer = null;
+try{ me = JSON.parse(localStorage.getItem("me")||"{}"); }catch(e){}
+
+/* ============ شاشة البيانات ============ */
+if(me.name) $("#name").value = me.name;
+if(me.phone) $("#phone").value = me.phone;
+
+$("#goBtn").onclick = async () => {
+  const name = $("#name").value.trim().replace(/\s+/g," ");
+  const phone = digits($("#phone").value);
+  if(!validName(name)) return say($("#gateMsg"),"لازم الاسم رباعي كامل: اسمك واسم الأب والجد والعائلة");
+  if(!/^01[0-9]{9}$/.test(phone)) return say($("#gateMsg"),"رقم الموبايل لازم يكون 11 رقم ويبدأ بـ 01");
+  me = {name, phone};
+  try{ localStorage.setItem("me", JSON.stringify(me)); }catch(e){}
+  say($("#gateMsg"),"");
+  $("#goBtn").disabled = true;
+  try{
+    const st = await api("get_status",{p_phone:phone});
+    if(st.registered) return finish(st.section, st.name, true);
+    if(!st.registration_open) return say($("#gateMsg"),"التسجيل مقفول حاليًا. " + (st.notice||""));
+    show($("#gate"),false);
+    show($("#picker"),true);
+    if(st.notice) say($("#notice"), st.notice, "ok");
+    await loadSections();
+    timer = setInterval(loadSections, 20000);
+  }catch(e){ say($("#gateMsg"), e.message || "في مشكلة في الاتصال"); }
+  finally{ $("#goBtn").disabled = false; }
+};
+
+/* ============ اختيار السكشن ============ */
+async function loadSections(){
+  secs = await api("list_sections");
+  const byId = Object.fromEntries(secs.map(s=>[s.id,s]));
+  $("#groups").innerHTML = Object.entries(GROUPS).map(([g,list]) => `
+    <div class="grp"><h3>مجموعة م${g}</h3><div class="secs">${list.map(n=>{
+      const s = byId[n] || {capacity:0, taken:0, is_open:false};
+      const left = Math.max(0, s.capacity - s.taken);
+      const full = !s.is_open || left === 0;
+      return `<button class="sec" data-sec="${n}" ${full?"disabled":""}>
+        <span class="n">${n}</span>
+        <span class="left">${full ? (s.is_open ? "اكتمل العدد" : "مقفول") : "فاضي "+left+" من "+s.capacity}</span>
+      </button>`;}).join("")}</div></div>`).join("");
+}
+
+$("#groups").onclick = e => {
+  const b = e.target.closest(".sec");
+  if(!b || b.disabled) return;
+  window._pick = +b.dataset.sec;
+  $("#confirmTxt").textContent = `هتسجل في سكشن ${window._pick} باسم ${me.name}. الاختيار ده نهائي ومينفعش يتغير.`;
+  show($("#confirm"),true);
+};
+$("#noBtn").onclick = () => show($("#confirm"),false);
+
+$("#yesBtn").onclick = async () => {
+  $("#yesBtn").disabled = true;
+  try{
+    const r = await api("register_student",{p_name:me.name, p_phone:me.phone, p_section:window._pick});
+    show($("#confirm"),false);
+    if(r.ok) return finish(r.section, r.name);
+    if(r.code === "already") return finish(r.section, r.name, true);
+    say($("#pickMsg"), r.msg || "محصلش تسجيل، جرب تاني");
+    await loadSections();
+  }catch(e){ show($("#confirm"),false); say($("#pickMsg"), e.message || "في مشكلة في الاتصال"); }
+  finally{ $("#yesBtn").disabled = false; }
+};
+
+function finish(sec, name, already){
+  clearInterval(timer);
+  show($("#gate"),false); show($("#picker"),false); show($("#done"),true);
+  $("#doneSec").textContent = sec;
+  $("#doneName").textContent = name || me.name;
+  $("#doneTitle").textContent = already ? "الرقم ده مسجل قبل كده" : "تم تسجيلك";
+  $("#doneMsg").textContent = already
+    ? "التسجيل مرة واحدة بس، ومش هينفع تسجل تاني بنفس الرقم. لو محتاج تغيير، كلّم المسؤول عن التوزيع."
+    : "الاختيار ده نهائي. لو فيه أي تعديل، كلّم المسؤول عن التوزيع.";
+  if(SCHEDULE_URL){ $("#schedLink").href = SCHEDULE_URL + "#L2-" + sec; }
+  else { show($("#schedLink"), false); }
+}
+
+/* ============ لوحة التحكم ============ */
+function openAdmin(){
+  show($("#gate"),false); show($("#picker"),false); show($("#done"),false); show($("#admin"),true);
+  clearInterval(timer);
+}
+if(location.hash === "#admin") openAdmin();
+$("#adminLink").onclick = e => { e.preventDefault(); location.hash = "#admin"; openAdmin(); };
+
+$("#loginBtn").onclick = async () => {
+  adminCode = $("#code").value;
+  try{
+    const r = await api("admin_summary",{p_code:adminCode});
+    if(!r.ok) return say($("#loginMsg"),"الكود غلط");
+    show($("#adminLogin"),false); show($("#adminPanel"),true);
+    renderAdmin(r); loadStudents();
+  }catch(e){ say($("#loginMsg"), e.message || "في مشكلة في الاتصال"); }
+};
+
+async function refresh(){ renderAdmin(await api("admin_summary",{p_code:adminCode})); }
+$("#refreshBtn").onclick = () => { refresh(); loadStudents(); };
+
+function renderAdmin(r){
+  $("#totalTxt").textContent = `إجمالي المسجلين: ${r.total}`;
+  $("#toggleReg").textContent = r.registration_open ? "اقفل التسجيل" : "افتح التسجيل";
+  $("#toggleReg").className = "btn sm " + (r.registration_open ? "danger" : "");
+  $("#toggleReg").onclick = async () => {
+    await api("admin_set_registration_open",{p_code:adminCode, p_open:!r.registration_open});
+    refresh();
+  };
+  $("#capTable").tBodies[0].innerHTML = (r.sections||[]).map(s=>`
+    <tr>
+      <td><b>${s.id}</b></td><td>م${s.group_no}</td>
+      <td><input type="number" min="0" value="${s.capacity}" data-cap="${s.id}" style="width:90px;padding:6px 8px"></td>
+      <td>${s.taken}</td>
+      <td><button class="btn sm ${s.is_open?"ghost":"danger"}" data-open="${s.id}" data-val="${s.is_open?0:1}">${s.is_open?"مفتوح":"مقفول"}</button></td>
+    </tr>`).join("");
+}
+
+$("#capTable").addEventListener("change", async e => {
+  const id = e.target.dataset.cap; if(!id) return;
+  await api("admin_set_capacity",{p_code:adminCode, p_section:+id, p_capacity:+e.target.value});
+  refresh();
+});
+$("#capTable").addEventListener("click", async e => {
+  const b = e.target.closest("[data-open]"); if(!b) return;
+  await api("admin_set_section_open",{p_code:adminCode, p_section:+b.dataset.open, p_open:b.dataset.val==="1"});
+  refresh();
+});
+
+$("#bulkBtn").onclick = async () => {
+  const v = +$("#bulkCap").value;
+  if(!(v >= 0)) return say($("#adminMsg"),"اكتب رقم صح");
+  await api("admin_set_capacity",{p_code:adminCode, p_section:null, p_capacity:v});
+  say($("#adminMsg"),"اتظبط العدد لكل السكاشن","ok"); refresh();
+};
+
+let students = [];
+async function loadStudents(){
+  students = await api("admin_list",{p_code:adminCode, p_q:$("#q").value.trim()});
+  $("#stuTable").tBodies[0].innerHTML = students.map(s=>`
+    <tr>
+      <td>${esc(s.full_name)}</td><td dir="ltr">${esc(s.phone)}</td>
+      <td><select data-move="${s.id}" style="padding:5px;width:70px">${
+        Object.values(GROUPS).flat().map(n=>`<option ${n===s.section_id?"selected":""}>${n}</option>`).join("")}</select></td>
+      <td>${new Date(s.created_at).toLocaleString("ar-EG")}</td>
+      <td><button class="btn sm danger" data-del="${s.id}">حذف</button></td>
+    </tr>`).join("");
+}
+let qt; $("#q").oninput = () => { clearTimeout(qt); qt = setTimeout(loadStudents, 350); };
+
+$("#stuTable").addEventListener("change", async e => {
+  const id = e.target.dataset.move; if(!id) return;
+  let r = await api("admin_move",{p_code:adminCode, p_id:+id, p_section:+e.target.value});
+  if(!r.ok && r.code === "full"){
+    if(!confirm("السكشن مكتمل العدد. تنقله بالإجبار؟")) return loadStudents();
+    r = await api("admin_move",{p_code:adminCode, p_id:+id, p_section:+e.target.value, p_force:true});
+  }
+  say($("#adminMsg"), r.ok ? "اتنقل" : (r.msg||"محصلش"), r.ok ? "ok" : "err");
+  refresh(); loadStudents();
+});
+$("#stuTable").addEventListener("click", async e => {
+  const b = e.target.closest("[data-del]"); if(!b) return;
+  if(!confirm("تحذف تسجيل الطالب ده؟ هيقدر يسجل تاني من الأول.")) return;
+  await api("admin_delete",{p_code:adminCode, p_id:+b.dataset.del});
+  refresh(); loadStudents();
+});
+
+$("#csvBtn").onclick = async () => {
+  const all = await api("admin_list",{p_code:adminCode, p_q:""});
+  const rows = [["الاسم","الموبايل","السكشن","وقت التسجيل"],
+    ...all.map(s=>[s.full_name, s.phone, s.section_id, new Date(s.created_at).toLocaleString("ar-EG")])];
+  const csv = "\uFEFF" + rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download = "sections-" + new Date().toISOString().slice(0,10) + ".csv";
+  document.body.appendChild(a); a.click(); a.remove();
+};
+
+$("#codeBtn").onclick = async () => {
+  const nw = prompt("الكود الجديد (8 حروف على الأقل):");
+  if(!nw) return;
+  const r = await api("admin_set_code",{p_code:adminCode, p_new:nw});
+  if(r.ok){ adminCode = nw; say($("#adminMsg"),"اتغير الكود","ok"); }
+  else say($("#adminMsg"), r.msg || "محصلش");
+};
+</script>
+</body>
+</html>
